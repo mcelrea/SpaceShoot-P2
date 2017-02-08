@@ -46,7 +46,7 @@ public class GameplayScreen implements Screen {
         clearScreen();
         getUserInput();
 
-        update(delta);
+        update(delta); //update AI, collision, etc.
 
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);

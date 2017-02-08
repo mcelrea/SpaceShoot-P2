@@ -26,6 +26,7 @@ public class PlayerShip {
                 COLLISION_HEIGHT);
     }
 
+    //shoot
     public void shoot(Array<Bullet> bullets) {
         if(currentWeapon == SINGLERAIL) {
             Bullet b = new Bullet(x + COLLISION_WIDTH / 2,

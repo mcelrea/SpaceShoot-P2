@@ -22,6 +22,7 @@ public class Bullet {
         this.yVel = yVel;
     }
 
+    //update bullet
     public void update(float delta) {
         x = x + xVel * delta; //move image
         y = y + yVel * delta; //move image
