@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -23,7 +24,7 @@ public class GameplayScreen implements Screen {
     private Camera camera; //the players view of the world
     private Viewport viewport; //control the view of the world
     private PlayerShip player;
-
+    Array<Bullet> playerBullets = new Array<Bullet>();
 
     public GameplayScreen(MyGdxGame myGdxGame) {
     }
@@ -45,6 +46,8 @@ public class GameplayScreen implements Screen {
         clearScreen();
         getUserInput();
 
+        update(delta);
+
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         //all graphics drawing goes here
@@ -55,11 +58,22 @@ public class GameplayScreen implements Screen {
         shapeRenderer.setTransformMatrix(camera.view);
         //all graphics drawing goes here
         shapeRenderer.begin();
+        for(int i=0; i < playerBullets.size; i++) {
+            playerBullets.get(i).drawDebug(shapeRenderer);
+        }
         player.drawDebug(shapeRenderer);
         shapeRenderer.end();
     }
 
+    private void update(float delta) {
+        //update bullets
+        for(int i=0; i < playerBullets.size; i++) {
+            playerBullets.get(i).update(delta);
+        }
+    }
+
     private void getUserInput() {
+        //player moving
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.flyLeft();
         }
@@ -71,6 +85,11 @@ public class GameplayScreen implements Screen {
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
             player.flyDown();
+        }
+
+        //player shooting
+        if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+            player.shoot(playerBullets);
         }
     }
 
