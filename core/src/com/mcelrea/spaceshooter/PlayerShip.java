@@ -14,9 +14,11 @@ public class PlayerShip {
     private Rectangle collisionRect;
     private float shipSpeed = 5f;
     private static final int SINGLERAIL=1, DOUBLERAIL=2;
-    private int currentWeapon = DOUBLERAIL;
+    private int currentWeapon = SINGLERAIL;
+    private long shootDelay = 300; //1000 = 1 second
+    private long lastShot;
 
-    public PlayerShip(float x, float y, Texture image) {
+    public PlayerShip(float x, float y, String path) {
         this.x = x;
         this.y = y;
         this.image = image;
@@ -24,28 +26,31 @@ public class PlayerShip {
                 y,
                 COLLISION_WIDTH,
                 COLLISION_HEIGHT);
+        lastShot = System.currentTimeMillis(); //lastShot = currentTime
     }
 
     //shoot
     public void shoot(Array<Bullet> bullets) {
-        if(currentWeapon == SINGLERAIL) {
-            Bullet b = new Bullet(x + COLLISION_WIDTH / 2,
-                    y + COLLISION_HEIGHT,
-                    0,
-                    500);
-            bullets.add(b);
-        }
-        else if(currentWeapon == DOUBLERAIL) {
-            Bullet b = new Bullet(x,
-                    y + COLLISION_HEIGHT,
-                    0,
-                    500);
-            bullets.add(b);
-            b = new Bullet(x + COLLISION_WIDTH,
-                    y + COLLISION_HEIGHT,
-                    0,
-                    500);
-            bullets.add(b);
+        if(lastShot + shootDelay <= System.currentTimeMillis()) {
+            lastShot = System.currentTimeMillis();
+            if (currentWeapon == SINGLERAIL) {
+                Bullet b = new Bullet(x + COLLISION_WIDTH / 2,
+                        y + COLLISION_HEIGHT,
+                        0,
+                        500);
+                bullets.add(b);
+            } else if (currentWeapon == DOUBLERAIL) {
+                Bullet b = new Bullet(x,
+                        y + COLLISION_HEIGHT,
+                        0,
+                        500);
+                bullets.add(b);
+                b = new Bullet(x + COLLISION_WIDTH,
+                        y + COLLISION_HEIGHT,
+                        0,
+                        500);
+                bullets.add(b);
+            }
         }
     }
 

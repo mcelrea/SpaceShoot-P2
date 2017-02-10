@@ -38,7 +38,7 @@ public class GameplayScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
         batch = new SpriteBatch();
-        player = new PlayerShip(400,300,null);
+        player = new PlayerShip(400,300,"spaceSpriteSheet.png");
     }
 
     @Override
@@ -70,15 +70,48 @@ public class GameplayScreen implements Screen {
         for(int i=0; i < playerBullets.size; i++) {
             playerBullets.get(i).update(delta);
         }
+        removeBulletsOffscreen();
+    }
+
+    private void removeBulletsOffscreen() {
+        for(int i=0; i < playerBullets.size; i++) {
+            Bullet b = playerBullets.get(i);
+            //top
+            if(b.getY() >= WORLD_HEIGHT) {
+                playerBullets.removeIndex(i);//remove bullet
+                i--;//there is now one less bullet
+            }
+            //bottom
+            else if(b.getY() + b.getDiameter() <= 0) {
+                playerBullets.removeIndex(i);//remove bullet
+                i--;//there is now one less bullet
+            }
+            //left
+            else if(b.getX() + b.getDiameter() <= 0) {
+                playerBullets.removeIndex(i);//remove bullet
+                i--;//there is now one less bullet
+            }
+            //right
+            else if(b.getX() > WORLD_WIDTH) {
+                playerBullets.removeIndex(i);//remove bullet
+                i--;//there is now one less bullet
+            }
+        }
     }
 
     private void getUserInput() {
         //player moving
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.flyLeft();
+            if(player.getX() <= 0) {
+                player.setPosition(0,player.getY());
+            }
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.flyRight();
+            if(player.getX() + 25 >= WORLD_WIDTH) {
+                player.setPosition(WORLD_WIDTH - 25, player.getY());
+            }
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.W)) {
             player.flyUp();

@@ -35,4 +35,16 @@ public class Bullet {
                 collisionCircle.y,
                 collisionCircle.radius);
     }
+
+    public float getDiameter() {
+        return COLLISION_RADIUS*2;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
 }
