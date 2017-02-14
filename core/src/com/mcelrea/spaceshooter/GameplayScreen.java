@@ -52,6 +52,7 @@ public class GameplayScreen implements Screen {
         batch.setTransformMatrix(camera.view);
         //all graphics drawing goes here
         batch.begin();
+        player.draw(batch);
         batch.end();
 
         shapeRenderer.setProjectionMatrix(camera.projection);
@@ -71,6 +72,9 @@ public class GameplayScreen implements Screen {
             playerBullets.get(i).update(delta);
         }
         removeBulletsOffscreen();
+
+        //update ship
+        player.update(delta);
     }
 
     private void removeBulletsOffscreen() {
@@ -100,24 +104,40 @@ public class GameplayScreen implements Screen {
     }
 
     private void getUserInput() {
+        boolean movingLeft = false;
+        boolean movingRight = false;
+
         //player moving
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.flyLeft();
+            movingLeft = true;
             if(player.getX() <= 0) {
                 player.setPosition(0,player.getY());
             }
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.flyRight();
+            movingRight = true;
             if(player.getX() + 25 >= WORLD_WIDTH) {
                 player.setPosition(WORLD_WIDTH - 25, player.getY());
             }
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.W)) {
             player.flyUp();
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
             player.flyDown();
+        }
+
+        //set direction of ship
+        if(movingLeft && !movingRight) {
+            player.setDir(PlayerShip.LEFT);
+        }
+        else if(movingRight && !movingLeft) {
+            player.setDir(PlayerShip.RIGHT);
+        }
+        else {
+            player.setDir(PlayerShip.MIDDLE);
         }
 
         //player shooting
