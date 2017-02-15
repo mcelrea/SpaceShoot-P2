@@ -25,6 +25,7 @@ public class GameplayScreen implements Screen {
     private Viewport viewport; //control the view of the world
     private PlayerShip player;
     Array<Bullet> playerBullets = new Array<Bullet>();
+    Array<Enemy> enemies = new Array<Enemy>();
 
     public GameplayScreen(MyGdxGame myGdxGame) {
     }
@@ -39,6 +40,7 @@ public class GameplayScreen implements Screen {
         shapeRenderer.setAutoShapeType(true);
         batch = new SpriteBatch();
         player = new PlayerShip(400,300,"spaceSpriteSheet.png");
+        enemies.add(new LeftSwoopEnemyWave(700,300));
     }
 
     @Override
@@ -62,6 +64,9 @@ public class GameplayScreen implements Screen {
         for(int i=0; i < playerBullets.size; i++) {
             playerBullets.get(i).drawDebug(shapeRenderer);
         }
+        for(int i=0; i < enemies.size; i++) {
+            enemies.get(i).drawDebug(shapeRenderer);
+        }
         player.drawDebug(shapeRenderer);
         shapeRenderer.end();
     }
@@ -75,6 +80,11 @@ public class GameplayScreen implements Screen {
 
         //update ship
         player.update(delta);
+
+        //update enemies
+        for(int i=0; i < enemies.size; i++) {
+            enemies.get(i).act(delta);
+        }
     }
 
     private void removeBulletsOffscreen() {
