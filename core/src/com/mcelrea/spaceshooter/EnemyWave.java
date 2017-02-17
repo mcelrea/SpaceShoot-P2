@@ -16,10 +16,20 @@ public class LeftSwoopEnemyWave extends Enemy {
         }
     }
 
-    @Override
-    public void act(float delta) {
+    public void checkWaveForHit(Bullet b) {
         for(int i=0; i < wave.size; i++) {
-            wave.get(i).act(delta);
+            Enemy e = wave.get(i);
+            if(e.isHit(b)) {
+                wave.removeIndex(i);
+                i--;
+            }
+        }
+    }
+
+    @Override
+    public void act(float delta, Array<Bullet> bullets) {
+        for(int i=0; i < wave.size; i++) {
+            wave.get(i).act(delta,bullets);
         }
     }
 
