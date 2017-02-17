@@ -3,12 +3,12 @@ package com.mcelrea.spaceshooter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
-public class LeftSwoopEnemyWave extends Enemy {
+public class EnemyWave extends Enemy {
 
     Array<Enemy> wave;
     private static final int NUMOFENEMIES = 10;
 
-    public LeftSwoopEnemyWave(float x, float y) {
+    public EnemyWave(float x, float y) {
         super(x, y);
         wave = new Array<Enemy>();
         for(int i=0; i < NUMOFENEMIES; i++) {

@@ -47,4 +47,8 @@ public class Bullet {
     public float getY() {
         return y;
     }
+
+    public Circle getCollisionCircle() {
+        return collisionCircle;
+    }
 }

@@ -25,7 +25,8 @@ public class GameplayScreen implements Screen {
     private Viewport viewport; //control the view of the world
     private PlayerShip player;
     Array<Bullet> playerBullets = new Array<Bullet>();
-    Array<Enemy> enemies = new Array<Enemy>();
+    Array<Bullet> enemyBullets = new Array<Bullet>();
+    Array<EnemyWave> enemies = new Array<EnemyWave>();
 
     public GameplayScreen(MyGdxGame myGdxGame) {
     }
@@ -40,7 +41,7 @@ public class GameplayScreen implements Screen {
         shapeRenderer.setAutoShapeType(true);
         batch = new SpriteBatch();
         player = new PlayerShip(400,300,"spaceSpriteSheet.png");
-        enemies.add(new LeftSwoopEnemyWave(700,300));
+        enemies.add(new EnemyWave(700,300));
     }
 
     @Override
@@ -64,6 +65,9 @@ public class GameplayScreen implements Screen {
         for(int i=0; i < playerBullets.size; i++) {
             playerBullets.get(i).drawDebug(shapeRenderer);
         }
+        for(int i=0; i < enemyBullets.size; i++) {
+            enemyBullets.get(i).drawDebug(shapeRenderer);
+        }
         for(int i=0; i < enemies.size; i++) {
             enemies.get(i).drawDebug(shapeRenderer);
         }
@@ -72,9 +76,17 @@ public class GameplayScreen implements Screen {
     }
 
     private void update(float delta) {
-        //update bullets
+        //update player bullets
         for(int i=0; i < playerBullets.size; i++) {
-            playerBullets.get(i).update(delta);
+            Bullet b = playerBullets.get(i);
+            b.update(delta);
+            for(int j=0; j < enemies.size; j++) {
+                enemies.get(j).checkWaveForHit(b);
+            }
+        }
+        //update enemy bullets
+        for(int i=0; i < enemyBullets.size; i++) {
+            enemyBullets.get(i).update(delta);
         }
         removeBulletsOffscreen();
 
@@ -83,7 +95,7 @@ public class GameplayScreen implements Screen {
 
         //update enemies
         for(int i=0; i < enemies.size; i++) {
-            enemies.get(i).act(delta);
+            enemies.get(i).act(delta,enemyBullets);
         }
     }
 
@@ -108,6 +120,30 @@ public class GameplayScreen implements Screen {
             //right
             else if(b.getX() > WORLD_WIDTH) {
                 playerBullets.removeIndex(i);//remove bullet
+                i--;//there is now one less bullet
+            }
+        }
+
+        for(int i=0; i < enemyBullets.size; i++) {
+            Bullet b = enemyBullets.get(i);
+            //top
+            if(b.getY() >= WORLD_HEIGHT) {
+                enemyBullets.removeIndex(i);//remove bullet
+                i--;//there is now one less bullet
+            }
+            //bottom
+            else if(b.getY() + b.getDiameter() <= 0) {
+                enemyBullets.removeIndex(i);//remove bullet
+                i--;//there is now one less bullet
+            }
+            //left
+            else if(b.getX() + b.getDiameter() <= 0) {
+                enemyBullets.removeIndex(i);//remove bullet
+                i--;//there is now one less bullet
+            }
+            //right
+            else if(b.getX() > WORLD_WIDTH) {
+                enemyBullets.removeIndex(i);//remove bullet
                 i--;//there is now one less bullet
             }
         }
