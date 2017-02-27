@@ -41,7 +41,8 @@ public class GameplayScreen implements Screen {
         shapeRenderer.setAutoShapeType(true);
         batch = new SpriteBatch();
         player = new PlayerShip(400,300,"spaceSpriteSheet.png");
-        enemies.add(new EnemyWave(700,300));
+        enemies.add(new EnemyWave(-100,300,10,50,EnemyWave.TOPARC));
+        enemies.add(new EnemyWave(700,300,10,50,EnemyWave.LEFTSWOOP));
     }
 
     @Override
@@ -83,6 +84,10 @@ public class GameplayScreen implements Screen {
             for(int j=0; j < enemies.size; j++) {
                 enemies.get(j).checkWaveForHit(b);
             }
+            if(b.isAlive() == false) {
+                playerBullets.removeIndex(i);
+                i--;
+            }
         }
         //update enemy bullets
         for(int i=0; i < enemyBullets.size; i++) {
@@ -96,6 +101,10 @@ public class GameplayScreen implements Screen {
         //update enemies
         for(int i=0; i < enemies.size; i++) {
             enemies.get(i).act(delta,enemyBullets);
+            if(enemies.get(i).size() == 0) {
+                enemies.removeIndex(i);
+                i--;
+            }
         }
     }
 

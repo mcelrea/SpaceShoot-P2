@@ -11,6 +11,7 @@ public class Bullet {
     private float y;
     private float xVel; //x velocity
     private float yVel; //y velocity
+    private boolean alive = true;
 
     public Bullet(float x, float y, float xVel, float yVel) {
         collisionCircle = new Circle(x,
@@ -50,5 +51,13 @@ public class Bullet {
 
     public Circle getCollisionCircle() {
         return collisionCircle;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 }

@@ -9,8 +9,8 @@ public class Enemy {
     protected float x;
     protected float y;
     private static final float COLLISION_RADIUS=10f;
-    private Circle collisionCircle;
-    private float speed = 100;
+    protected Circle collisionCircle;
+    protected float speed = 100;
     protected long timer=900;//1000 = 1 sec
     protected long lastShotTimeStamp;
 

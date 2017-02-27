@@ -3,16 +3,24 @@ package com.mcelrea.spaceshooter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
-public class EnemyWave extends Enemy {
+public class EnemyWave {
 
-    Array<Enemy> wave;
-    private static final int NUMOFENEMIES = 10;
+    protected Array<Enemy> wave;
+    protected static int NUMOFENEMIES = 10;
+    protected static int GAP = 50;
+    public static final int LEFTSWOOP=1,TOPARC=2;
+    private int type;
 
-    public EnemyWave(float x, float y) {
-        super(x, y);
+    public EnemyWave(float x, float y, int num, int gap, int type) {
+        NUMOFENEMIES = num;
+        GAP = gap;
+        this.type = type;
         wave = new Array<Enemy>();
         for(int i=0; i < NUMOFENEMIES; i++) {
-            wave.add(new Enemy(x+(i*50),y));
+            if(type == LEFTSWOOP)
+                wave.add(new Enemy(x+(i*GAP),y));
+            if(type == TOPARC)
+                wave.add(new TopArcEnemy(x-(i*GAP),y));
         }
     }
 
@@ -22,21 +30,33 @@ public class EnemyWave extends Enemy {
             if(e.isHit(b)) {
                 wave.removeIndex(i);
                 i--;
+                b.setAlive(false);
+                return; //exit
             }
         }
     }
 
-    @Override
     public void act(float delta, Array<Bullet> bullets) {
         for(int i=0; i < wave.size; i++) {
             wave.get(i).act(delta,bullets);
+            if(type == LEFTSWOOP && wave.get(i).x < -30) {
+                wave.removeIndex(i);
+                i--;
+            }
+            else if(type == TOPARC && wave.get(i).x > 700) {
+                wave.removeIndex(i);
+                i--;
+            }
         }
     }
 
-    @Override
     public void drawDebug(ShapeRenderer shapeRenderer) {
         for(int i=0; i < wave.size; i++) {
             wave.get(i).drawDebug(shapeRenderer);
         }
+    }
+
+    public int size() {
+        return wave.size;
     }
 }
