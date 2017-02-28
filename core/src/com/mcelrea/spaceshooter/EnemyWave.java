@@ -1,5 +1,7 @@
 package com.mcelrea.spaceshooter;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
@@ -10,11 +12,13 @@ public class EnemyWave {
     protected static int GAP = 50;
     public static final int LEFTSWOOP=1,TOPARC=2;
     private int type;
+    private Texture enemyImage;
 
-    public EnemyWave(float x, float y, int num, int gap, int type) {
+    public EnemyWave(float x, float y, int num, int gap, int type, Texture t) {
         NUMOFENEMIES = num;
         GAP = gap;
         this.type = type;
+        enemyImage = t;
         wave = new Array<Enemy>();
         for(int i=0; i < NUMOFENEMIES; i++) {
             if(type == LEFTSWOOP)
@@ -53,6 +57,15 @@ public class EnemyWave {
     public void drawDebug(ShapeRenderer shapeRenderer) {
         for(int i=0; i < wave.size; i++) {
             wave.get(i).drawDebug(shapeRenderer);
+        }
+    }
+
+    public void draw(SpriteBatch batch) {
+        for(int i=0; i < wave.size; i++) {
+            Enemy e = wave.get(i);
+            batch.draw(enemyImage,
+                    e.getX()-e.getRadius(),
+                    e.getY()-e.getRadius());
         }
     }
 

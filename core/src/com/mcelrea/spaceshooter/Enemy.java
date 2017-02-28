@@ -51,4 +51,16 @@ public class Enemy {
             lastShotTimeStamp = System.currentTimeMillis();
         }
     }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getRadius() {
+        return collisionCircle.radius;
+    }
 }

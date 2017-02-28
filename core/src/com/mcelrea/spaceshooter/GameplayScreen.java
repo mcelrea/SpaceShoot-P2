@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -27,6 +28,8 @@ public class GameplayScreen implements Screen {
     Array<Bullet> playerBullets = new Array<Bullet>();
     Array<Bullet> enemyBullets = new Array<Bullet>();
     Array<EnemyWave> enemies = new Array<EnemyWave>();
+    Texture playerBulletImage;
+    Texture enemyBulletImage;
 
     public GameplayScreen(MyGdxGame myGdxGame) {
     }
@@ -41,8 +44,10 @@ public class GameplayScreen implements Screen {
         shapeRenderer.setAutoShapeType(true);
         batch = new SpriteBatch();
         player = new PlayerShip(400,300,"spaceSpriteSheet.png");
-        enemies.add(new EnemyWave(-100,300,10,50,EnemyWave.TOPARC));
-        enemies.add(new EnemyWave(700,300,10,50,EnemyWave.LEFTSWOOP));
+        enemies.add(new EnemyWave(-100,300,10,50,EnemyWave.TOPARC,new Texture("enemy1.png")));
+        enemies.add(new EnemyWave(700,300,10,50,EnemyWave.LEFTSWOOP,new Texture("enemy1.png")));
+        playerBulletImage = new Texture("playerBullet.png");
+        enemyBulletImage = new Texture("enemyBullet.png");
     }
 
     @Override
@@ -57,12 +62,22 @@ public class GameplayScreen implements Screen {
         //all graphics drawing goes here
         batch.begin();
         player.draw(batch);
+        for(int i=0; i < playerBullets.size; i++) {
+            playerBullets.get(i).draw(batch,playerBulletImage);
+        }
+        for(int i=0; i < enemyBullets.size; i++) {
+            enemyBullets.get(i).draw(batch,enemyBulletImage);
+        }
+        for(int i=0; i < enemies.size; i++) {
+            enemies.get(i).draw(batch);
+        }
         batch.end();
 
         shapeRenderer.setProjectionMatrix(camera.projection);
         shapeRenderer.setTransformMatrix(camera.view);
         //all graphics drawing goes here
         shapeRenderer.begin();
+        /*
         for(int i=0; i < playerBullets.size; i++) {
             playerBullets.get(i).drawDebug(shapeRenderer);
         }
@@ -73,6 +88,7 @@ public class GameplayScreen implements Screen {
             enemies.get(i).drawDebug(shapeRenderer);
         }
         player.drawDebug(shapeRenderer);
+        */
         shapeRenderer.end();
     }
 

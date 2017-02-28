@@ -1,5 +1,7 @@
 package com.mcelrea.spaceshooter;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 
@@ -35,6 +37,10 @@ public class Bullet {
         shapeRenderer.circle(collisionCircle.x,
                 collisionCircle.y,
                 collisionCircle.radius);
+    }
+
+    public void draw(SpriteBatch batch, Texture t) {
+        batch.draw(t,x-COLLISION_RADIUS,y-COLLISION_RADIUS);
     }
 
     public float getDiameter() {
